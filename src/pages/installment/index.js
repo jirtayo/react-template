@@ -1,7 +1,11 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { action } from "./store";
-import { setInstallment, setInstallmentAsync } from "./store/actionCreator";
+import {
+  setInstallment,
+  setInstallmentAsync,
+  setInstallmentAsyncSaga,
+} from "./store/actionCreator";
 export default function Installment() {
   const installment = useSelector((state) =>
     state.getIn(["installment", "installment"])
@@ -32,7 +36,8 @@ export default function Installment() {
       </button>
       <button
         onClick={() => {
-          dispatch(setInstallmentAsync("async AfterIntalllment"));
+          // dispatch(setInstallmentAsync("async AfterIntalllment"));
+          dispatch(setInstallmentAsyncSaga("async AfterIntalllment"));
         }}
       >
         设置 async

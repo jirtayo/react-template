@@ -7,6 +7,7 @@ const initState = fromJS({
 console.log(initState, "initState");
 
 export default (state = initState, action) => {
+  console.log(action, "每次的action");
   switch (action.type) {
     case actions.SET_INSTALLMENT:
       return state.set("installment", action.payload);
