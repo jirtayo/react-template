@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <div id="root">
+    <div id="parent">
+      <div id="child">点击</div>
+    </div>
+  </div>
+  <script>
+    const root = document.getElementById("root")
+    const parent = document.getElementById("parent")
+    const child = document.getElementById("child")
+
+    root.addEventListener("click", (event) => dispatchEvent(event, true), true)
+    root.addEventListener("click", (event) => dispatchEvent(event, false), false)
+
+    function dispatchEvent(event, isCapture) {
+      // console.log(event, event.target.parentNode, isCapture);
+      let curTarget = event.target
+      let paths = []
+      while (curTarget) {
+        paths.push(curTarget)
+        curTarget = curTarget.parentNode
+      }
+      if (isCapture) {
+        for (let i = paths.length - 1; i >= 0; i--) {
+          let handler = paths[i].onClickCapture
+          handler && handler(paths[i])
+        }
+      } else {
+        for (let i = 0; i < paths.length; i++) {
+          let handler = paths[i].onClick
+          handler && handler(paths[i])
+        }
+      }
+    }
+    root.addEventListener("click", () => {
+      console.log("root 原生捕获事件");
+    }, true)
+    root.addEventListener("click", () => {
+      console.log("root 原生冒泡事件");
+    }, false)
+    parent.addEventListener("click", () => {
+      console.log("parent 原生捕获事件");
+    }, true)
+    parent.addEventListener("click", () => {
+      console.log("parent 原生冒泡事件");
+    }, false)
+    child.addEventListener("click", (e) => {
+      // e.stopPropagation()
+      // e.preventDefault()
+      console.log("child 原生捕获事件");
+    }, true)
+    child.addEventListener("click", () => {
+      console.log("child 原生冒泡事件");
+    }, false)
+
+    parent.onClickCapture = (e) => {
+      console.log("parent react捕获事件", e);
+      // e.stopPropagation()
+    }
+    parent.onClick = () => {
+      console.log("parent react冒泡事件");
+    }
+    child.onClickCapture = () => {
+      console.log("child react捕获事件");
+    }
+    child.onClick = () => {
+      console.log("child react冒泡事件");
+    }
+    root.onClickCapture = () => {
+      console.log("root react捕获事件");
+    }
+    root.onClick = () => {
+      console.log("root react冒泡事件");
+    }
+  </script>
+</body>
+
+</html>

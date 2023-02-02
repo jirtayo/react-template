@@ -1,17 +1,28 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
-
-const root = ReactDOM.createRoot(document.getElementById('root'));
-root.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>
+import ReactDOM from "./react-dom";
+const element = (
+  <div
+    style={{ margin: "200px", color: "black" }}
+    onClick={(e) => {
+      console.log("parent 冒泡");
+    }}
+    onClickCapture={(e) => {
+      console.log("parent 捕捉");
+    }}
+  >
+    <div
+      onClick={(e) => {
+        e.stopPropagation();
+        console.log("child 冒泡");
+        // e.preventDefault();
+      }}
+      onClickCapture={(e) => {
+        console.log("child 捕捉");
+      }}
+      style={{ color: "red" }}
+    >
+      点击
+    </div>
+    <div>点击 2</div>
+  </div>
 );
-
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-reportWebVitals();
+ReactDOM.render(element, document.getElementById("root"));
