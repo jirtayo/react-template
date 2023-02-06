@@ -1,16 +1,20 @@
 import { allNativeEvents } from "./EventRegistry";
-import * as SimpleEventPlugin from "./SimpleEventPlugin";
+import * as SimpleEventPlugin from "./plugin/SimpleEventPlugin";
+import * as ChangeEventPlugin from "./plugin/ChangeEventPlugin";
 import {
   addEventCaptureListener,
   addEventBubbleListener,
 } from "./EventListener";
 import { getEventListenerSet } from "./ReactDOMComponentTree";
-import { IS_CAPTURE_PHASE } from "./EventSystemFlags";
+import { IS_CAPTURE_PHASE } from "./const/EventSystemFlags";
 import { dispatchEvent } from "./ReactDOMEventListener";
-import { HostComponent } from "./ReactWorkTags";
+import { HostComponent } from "./const/ReactWorkTags";
 import getListener from "./getListener";
+
 //注册插件 其实就是收集原生事件名称
 SimpleEventPlugin.registerEvents();
+ChangeEventPlugin.registerEvents();
+
 export const nonDelegatedEvents = new Set(["scroll"]);
 export function listenToAllSupportedEvents(rootContainerElement) {
   allNativeEvents.forEach((domEventName) => {
@@ -126,6 +130,17 @@ export function dispatchEventsForPlugins(
     eventSystemFlags,
     targetContainer
   );
+  if (eventSystemFlags !== IS_CAPTURE_PHASE) {
+    ChangeEventPlugin.extractEvents(
+      dispatchQueue,
+      domEventName,
+      targetInst,
+      nativeEvent,
+      nativeEventTarget,
+      eventSystemFlags,
+      targetContainer
+    );
+  }
   processDispatchQueue(dispatchQueue, eventSystemFlags);
   // console.log("dispatchQueue", dispatchQueue);
 }
@@ -229,4 +244,30 @@ export function accumulateSinglePhaseListeners(
  */
 function createDispatchListener(instance, listener, currentTarget) {
   return { instance, listener, currentTarget };
+}
+
+export function accumulateTwoPhaseListeners(targetFiber, reactName) {
+  const captureName = reactName + "Capture";
+  const listeners = [];
+  let instance = targetFiber;
+  while (instance !== null) {
+    const { stateNode, tag } = instance;
+    if (tag === HostComponent && stateNode !== null) {
+      const currentTarget = stateNode;
+      const captureListener = getListener(instance, captureName);
+      if (captureListener != null) {
+        listeners.unshift(
+          createDispatchListener(instance, captureListener, currentTarget)
+        );
+      }
+      const bubbleListener = getListener(instance, reactName);
+      if (bubbleListener != null) {
+        listeners.push(
+          createDispatchListener(instance, bubbleListener, currentTarget)
+        );
+      }
+    }
+    instance = instance.return;
+  }
+  return listeners;
 }

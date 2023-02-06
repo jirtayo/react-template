@@ -60,3 +60,4 @@ const MouseEventInterface = {
   clientY: 0,
 };
 export const SyntheticMouseEvent = createSyntheticEvent(MouseEventInterface);
+export const SyntheticEvent = createSyntheticEvent({});

@@ -28,7 +28,10 @@ const element = (
     >
       点击
     </div>
-    <div>点击 2</div>
+    <input
+      onChange={() => console.log("change")}
+      onChangeCapture={() => console.log("onChangeCapture")}
+    />
   </div>
 );
 ReactDOM.render(element, document.getElementById("root"));

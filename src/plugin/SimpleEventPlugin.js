@@ -1,10 +1,10 @@
 import {
   registerSimpleEvents,
   topLevelEventsToReactNames,
-} from "./DOMEventProperties";
-import { IS_CAPTURE_PHASE } from "./EventSystemFlags";
-import { SyntheticMouseEvent } from "./SyntheticEvent";
-import { accumulateSinglePhaseListeners } from "./DOMPluginEventSystem";
+} from "../DOMEventProperties";
+import { IS_CAPTURE_PHASE } from "../const/EventSystemFlags";
+import { SyntheticMouseEvent } from "../SyntheticEvent";
+import { accumulateSinglePhaseListeners } from "../DOMPluginEventSystem";
 /**
  * 提取事件处理函数
  * @param {*} dispatchQueue 队列

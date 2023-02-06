@@ -24,6 +24,7 @@ export function dispatchEvent(
   //获得来源对应的fiber的属性对象
   const props = getFiberCurrentPropsFromNode(nativeEventTarget);
   // console.log("props", props);
+
   // 批量执行
   batchedEventUpdates(() => {
     dispatchEventsForPlugins(

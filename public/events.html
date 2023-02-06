@@ -12,9 +12,11 @@
   <div id="root">
     <div id="parent">
       <div id="child">点击</div>
+      <input id="input" />
     </div>
   </div>
-  <!-- <div id="hello">hello</div> -->
+  <!-- <div id="bind">bind</div> -->
+
   <script>
     const root = document.getElementById("root")
     const parent = document.getElementById("parent")
@@ -84,11 +86,23 @@
       console.log("root react冒泡事件");
     }
 
-    // const hello = document.getElementById("hello")
+    const input = document.getElementById("input")
+    root.addEventListener("input", () => {
+      console.log("root input Capture");
+    }, true)
+    root.addEventListener("input", () => {
+      console.log("root input ");
+    }, false)
+    input.addEventListener("input", () => {
+      console.log('input');
+    })
+
+
+    // const bind = document.getElementById("bind")
     // function HH(a, b, c, e) {
     //   console.log("a, b, c, e", a, b, c, e);
     // }
-    // hello.addEventListener("click", HH.bind(null, "a", "b", "c"))
+    // bind.addEventListener("click", HH.bind(null, "a", "b", "c"))
   </script>
 </body>
 

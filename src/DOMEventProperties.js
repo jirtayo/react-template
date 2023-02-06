@@ -5,8 +5,6 @@ const discreteEventPairsForSimpleEventPlugin = [
   "click",
   "dblclick",
   "doubleClick",
-  "change",
-  "change",
 ];
 //原生事件名称和React事件名称的对应关系
 export const topLevelEventsToReactNames = new Map(); //{click:onClick}

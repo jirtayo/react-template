@@ -1,6 +1,6 @@
 import { listenToAllSupportedEvents } from "./DOMPluginEventSystem";
 import { internalInstanceKey, internalPropsKey } from "./ReactDOMComponentTree";
-import { HostComponent } from "./ReactWorkTags";
+import { HostComponent } from "./const/ReactWorkTags";
 
 function render(vdom, container) {
   listenToAllSupportedEvents(container);
