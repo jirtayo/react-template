@@ -3,6 +3,7 @@ import {
   getFiberCurrentPropsFromNode,
 } from "./ReactDOMComponentTree";
 import { dispatchEventsForPlugins } from "./DOMPluginEventSystem";
+import { batchedEventUpdates } from "./ReactDOMUpdateBatching";
 /**
  * 事件处理函数
  * @param {*} domEventName 事件名 click
@@ -23,11 +24,14 @@ export function dispatchEvent(
   //获得来源对应的fiber的属性对象
   const props = getFiberCurrentPropsFromNode(nativeEventTarget);
   // console.log("props", props);
-  dispatchEventsForPlugins(
-    domEventName,
-    eventSystemFlags,
-    nativeEvent,
-    targetInst,
-    targetContainer
-  );
+  // 批量执行
+  batchedEventUpdates(() => {
+    dispatchEventsForPlugins(
+      domEventName,
+      eventSystemFlags,
+      nativeEvent,
+      targetInst,
+      targetContainer
+    );
+  });
 }
