@@ -1,4 +1,6 @@
 import { listenToAllSupportedEvents } from "./DOMPluginEventSystem";
+import { internalInstanceKey, internalPropsKey } from "./ReactDOMComponentTree";
+import { HostComponent } from "./ReactWorkTags";
 
 function render(vdom, container) {
   listenToAllSupportedEvents(container);
@@ -17,6 +19,10 @@ export function createDOM(vdom, parentDOM) {
     dom = document.createElement(type);
   }
 
+  let returnFiber = parentDOM[internalInstanceKey] || null;
+  let fiber = { tag: HostComponent, type, stateNode: dom, return: returnFiber };
+  dom[internalInstanceKey] = fiber;
+  dom[internalPropsKey] = props;
   if (props) {
     updateProps(dom, {}, props);
     if (Array.isArray(props.children)) {

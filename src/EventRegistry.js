@@ -1,7 +1,7 @@
 //依赖 {onClick:['click'],onClickCapture:['click']}
 //所有的原生事件 ['click','dblclick']
 export const registrationNameDependencies = {};
-export const allNaticeEvents = new Set();
+export const allNativeEvents = new Set();
 
 /**
  * 注意两个阶段的事件监听
@@ -16,6 +16,6 @@ export function registerTwoPhaseEvent(registrationName, dependencies) {
 function registerDirectEvent(registrationName, dependencies) {
   registrationNameDependencies[registrationName] = dependencies;
   for (let i = 0; i < dependencies.length; i++) {
-    allNaticeEvents.add(dependencies[i]);
+    allNativeEvents.add(dependencies[i]);
   }
 }
