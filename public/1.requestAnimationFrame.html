@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <div id="root" style="background-color: lightblue; width: 0; height: 20px;"></div>
+  <button id="button">开始</button>
+  <script>
+    // * 请求动画帧 * 渲染前执行
+    // requestIdleCallback 渲染后执行
+    // 绘制完一帧所需要的时间大概为16.6ms
+    const div = document.getElementById("root")
+    const button = document.getElementById("button")
+
+    let start;
+    function progress() {
+      div.style.width = div.offsetWidth + 1 + "px"
+      div.innerHTML = (div.offsetWidth) + "%"
+      if (div.offsetWidth < 100) {
+        let current = Date.now()
+        console.log(current - start);
+        start = current
+        timer = requestAnimationFrame(progress)
+      }
+    }
+    button.onclick = () => {
+      div.style.width = 0
+      start = Date.now()
+      requestAnimationFrame(progress)
+    }
+  </script>
+</body>
+
+</html>

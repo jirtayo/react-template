@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    // 向请求浏览器剩余时间，执行优先级低的任务callback，但 timeout 超时后必须执行任务
+    function sleep(delay) {
+      for (let start = Date.now(); Date.now() - start <= delay;) { }
+    }
+    const works = [
+      () => {
+        console.log('第一个任务开始');
+        sleep(16)
+        console.log('第一个任务结束');
+      },
+      () => {
+        console.log('第二个任务开始');
+        sleep(16)
+        console.log('第二个任务结束');
+      },
+      () => {
+        console.log('第三个任务开始');
+        sleep(20)
+        console.log('第三个任务结束');
+      }
+    ]
+    // deadline.timeRemaining() 表示此帧剩余可使用的时间
+    // deadline.didTimeout 表示任务是否超时
+    function workLoop(deadline) {
+      console.log('本帧剩余时间', parseInt(deadline.timeRemaining()));
+      while ((deadline.timeRemaining() > 1 || deadline.didTimeout) && works.length > 0) {
+        performUnitOfWork()
+      }
+      if (works.length > 0) {
+        console.log(`只剩下${parseInt(deadline.timeRemaining())}ms,时间片到了等待下次空闲时间的调度`);
+        requestIdleCallback(workLoop)
+      }
+    }
+    function performUnitOfWork() {
+      works.shift()();
+    }
+    requestIdleCallback(workLoop, { timeout: 1000 })
+  </script>
+</body>
+
+</html>

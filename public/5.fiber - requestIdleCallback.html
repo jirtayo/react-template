@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    // fiber节点
+    let A1 = { type: 'div', key: 'A1' };
+    let B1 = { type: 'div', key: 'B1', return: A1 };
+    let B2 = { type: 'div', key: 'B2', return: A1 };
+    let C1 = { type: 'div', key: 'C1', return: B1 };
+    let C2 = { type: 'div', key: 'C2', return: B1 };
+    A1.child = B1;
+    B1.sibling = B2;
+    B1.child = C1;
+    C1.sibling = C2;
+
+    let nextUnitOfWork = null;
+    function workLoop(deadline) {
+      console.log('本帧剩余时间', parseInt(deadline.timeRemaining()));
+
+      while ((deadline.timeRemaining() > 1 || deadline.didTimeout) && nextUnitOfWork) {
+        nextUnitOfWork = performUnitOfWork(nextUnitOfWork)
+      }
+      if (nextUnitOfWork) {
+        console.log(`只剩下${parseInt(deadline.timeRemaining())}ms,时间片到了等待下次空闲时间的调度`);
+        requestIdleCallback(workLoop)
+      } else {
+        console.log('render 阶段结束了');
+        console.log();
+      }
+    }
+    function performUnitOfWork(fiber) {
+      beginWork(fiber)
+      if (fiber.child) return fiber.child
+
+      // 如果没有子节点说明当前节点已经完成渲染工作
+      while (fiber) {
+        completeUnitOfWork(fiber)
+        if (fiber.sibling) return fiber.sibling
+
+        // 如果没有弟弟节点就让父节点完成，然后找父节点的弟弟节点
+        fiber = fiber.return
+      }
+    }
+    function beginWork(fiber) {
+      console.log('+ 开始', fiber.key);
+    }
+    function completeUnitOfWork(fiber) {
+      console.log('- 结束', fiber.key);
+    }
+    nextUnitOfWork = A1
+
+    requestIdleCallback(workLoop, { timeout: 1000 })
+  </script>
+</body>
+
+</html>
