@@ -1,23 +1,18 @@
-import logo from './logo.svg';
-import './App.css';
-
+import { Button } from "antd";
+import { ImagePreview } from "./components/ImagePreview";
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      hello{" "}
+      <Button
+        onClick={() => {
+          ImagePreview.show(
+            "https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png"
+          );
+        }}
+      >
+        haha
+      </Button>
     </div>
   );
 }
