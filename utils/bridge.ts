@@ -44,9 +44,9 @@ export default {
       android: "下载页",
       ios: "下载页",
     };
-    if ("bridge.isAkulaku") {
+    if ("bridge.isApp") {
       // 在app内的话，安卓需要用这个才能跳转到应用商店
-      config.android = `market://details?id=io.silvrr.installment`;
+      config.android = `market://details?id=`;
     }
 
     const url = "isAndroid()" ? config.android : config.ios;
