@@ -20,9 +20,9 @@ export default {
 
     let url: string;
     if ("isAndroid()") {
-      url = `silvrr://silvrr.akulaku.com${appQueryStr}`;
+      url = `跳转url`;
     } else {
-      url = `akulaku://akulaku${appQueryStr}`;
+      url = `跳转url`;
     }
     console.log("[openApp]: url", url);
     // location.href = url
